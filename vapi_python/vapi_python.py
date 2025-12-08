@@ -14,12 +14,14 @@ def create_web_call(api_url, api_key, payload):
     }
     response = requests.post(url, headers=headers, json=payload)
     data = response.json()
+    # We call response.json() before raise_for_status() to ensure we have the error message
+    # in 'data' in case of an exception, although raise_for_status() will handle the HTTP error.
+    response.raise_for_status()
+    # The API returns 201 on success, so we check for it explicitly.
     if response.status_code == 201:
         call_id = data.get('id')
         web_call_url = data.get('webCallUrl')
         return call_id, web_call_url
-    else:
-        raise Exception(f"Error: {data['message']}")
 
 
 class Vapi:
