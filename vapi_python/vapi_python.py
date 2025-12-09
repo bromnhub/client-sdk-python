@@ -83,7 +83,7 @@ class Vapi:
 
     def add_message(self, role, content):
         """
-        method to send text messages with specific parameters.
+        Adds a text message to the conversation history with specified role and content.
         """
         message = {
             'type': 'add-message',
