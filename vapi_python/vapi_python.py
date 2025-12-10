@@ -19,7 +19,8 @@ def create_web_call(api_url, api_key, payload):
         web_call_url = data.get('webCallUrl')
         return call_id, web_call_url
     else:
-        raise Exception(f"Error: {data['message']}")
+        error_message = data.get('message', 'Unknown API error')
+        raise Exception(f"API Error {response.status_code}: {error_message}")
 
 
 class Vapi:
