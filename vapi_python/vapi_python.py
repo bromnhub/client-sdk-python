@@ -38,9 +38,13 @@ class Vapi:
     ):
         # Start a new call
         if assistant_id:
-            payload = {'assistantId': assistant_id, 'assistantOverrides': assistant_overrides}
+            payload = {'assistantId': assistant_id}
+            if assistant_overrides:
+                payload['assistantOverrides'] = assistant_overrides
         elif assistant:
-            payload = {'assistant': assistant, 'assistantOverrides': assistant_overrides}
+            payload = {'assistant': assistant}
+            if assistant_overrides:
+                payload['assistantOverrides'] = assistant_overrides
         elif squad_id:
             payload = {'squadId': squad_id}
         elif squad:
