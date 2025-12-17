@@ -9,10 +9,11 @@ CHUNK_SIZE = 640
 
 
 def is_playable_speaker(participant):
-    is_speaker = "userName" in participant["info"] and participant["info"]["userName"] == "Vapi Speaker"
-    mic = participant["media"]["microphone"]
-    is_subscribed = mic["subscribed"] == "subscribed"
-    is_playable = mic["state"] == "playable"
+    info = participant.get("info", {})
+    is_speaker = info.get("userName") == "Vapi Speaker"
+    mic = participant.get("media", {}).get("microphone", {})
+    is_subscribed = mic.get("subscribed") == "subscribed"
+    is_playable = mic.get("state") == "playable"
     return is_speaker and is_subscribed and is_playable
 
 
