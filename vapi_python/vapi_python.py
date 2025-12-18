@@ -83,7 +83,10 @@ class Vapi:
 
     def add_message(self, role, content):
         """
-        method to send text messages with specific parameters.
+        Sends a text message to the assistant with a specified role and content.
+
+        :param role: The role of the message sender (e.g., 'user', 'system').
+        :param content: The text content of the message.
         """
         message = {
             'type': 'add-message',
