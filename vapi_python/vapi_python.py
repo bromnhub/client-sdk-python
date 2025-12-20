@@ -1,4 +1,5 @@
 from daily import *
+from requests.exceptions import ConnectionError
 import requests
 from .daily_call import DailyCall
 
@@ -19,7 +20,7 @@ def create_web_call(api_url, api_key, payload):
         web_call_url = data.get('webCallUrl')
         return call_id, web_call_url
     else:
-        raise Exception(f"Error: {data['message']}")
+        raise ConnectionError(f"API Error: {data['message']}")
 
 
 class Vapi:
@@ -46,13 +47,13 @@ class Vapi:
         elif squad:
             payload = {'squad': squad}
         else:
-            raise Exception("Error: No assistant specified.")
+            raise ValueError("Error: No assistant specified.")
 
         call_id, web_call_url = create_web_call(
             self.api_url, self.api_key, payload)
 
         if not web_call_url:
-            raise Exception("Error: Unable to create call.")
+            raise ConnectionError("Error: Unable to create call.")
 
         print('Joining call... ' + call_id)
 
