@@ -13,13 +13,16 @@ def create_web_call(api_url, api_key, payload):
         'Content-Type': 'application/json'
     }
     response = requests.post(url, headers=headers, json=payload)
+    response.raise_for_status()
     data = response.json()
     if response.status_code == 201:
         call_id = data.get('id')
         web_call_url = data.get('webCallUrl')
         return call_id, web_call_url
     else:
-        raise Exception(f"Error: {data['message']}")
+        # This case should ideally not be reached if raise_for_status() is used,
+        # but we keep it for safety if status code is not 201 but also not an error.
+        raise Exception(f"Error: Unexpected status code {response.status_code}")
 
 
 class Vapi:
