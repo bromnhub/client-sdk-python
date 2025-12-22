@@ -13,13 +13,17 @@ def create_web_call(api_url, api_key, payload):
         'Content-Type': 'application/json'
     }
     response = requests.post(url, headers=headers, json=payload)
+    response.raise_for_status()  # Raise HTTPError for bad responses (4xx or 5xx)
+    
     data = response.json()
     if response.status_code == 201:
         call_id = data.get('id')
         web_call_url = data.get('webCallUrl')
         return call_id, web_call_url
-    else:
-        raise Exception(f"Error: {data['message']}")
+    
+    # If we reach here, the status code was 2xx but not 201, which is unexpected for a creation endpoint.
+    # We raise an exception to be safe, though raise_for_status() handles 4xx/5xx.
+    raise Exception(f"Unexpected successful status code {response.status_code}. Response: {data}")
 
 
 class Vapi:
