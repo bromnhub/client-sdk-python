@@ -12,14 +12,22 @@ def create_web_call(api_url, api_key, payload):
         'Authorization': 'Bearer ' + api_key,
         'Content-Type': 'application/json'
     }
-    response = requests.post(url, headers=headers, json=payload)
-    data = response.json()
-    if response.status_code == 201:
+    try:
+        response = requests.post(url, headers=headers, json=payload)
+        response.raise_for_status()
+        data = response.json()
         call_id = data.get('id')
         web_call_url = data.get('webCallUrl')
         return call_id, web_call_url
-    else:
-        raise Exception(f"Error: {data['message']}")
+    except requests.exceptions.HTTPError as e:
+        try:
+            error_data = response.json()
+            message = error_data.get('message', 'Unknown API error')
+        except:
+            message = f"HTTP Error {response.status_code}: {response.reason}"
+        raise Exception(f"API Call Failed: {message}") from e
+    except requests.exceptions.RequestException as e:
+        raise Exception(f"Connection Error: {e}") from e
 
 
 class Vapi:
