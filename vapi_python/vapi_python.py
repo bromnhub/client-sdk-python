@@ -19,7 +19,7 @@ def create_web_call(api_url, api_key, payload):
         web_call_url = data.get('webCallUrl')
         return call_id, web_call_url
     else:
-        raise Exception(f"Error: {data['message']}")
+        raise requests.HTTPError(f"Error: {data['message']}")
 
 
 class Vapi:
